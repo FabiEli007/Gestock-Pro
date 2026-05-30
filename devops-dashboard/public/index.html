@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestock Pro DevOps Dashboard</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="brandBlock">
+        <span class="brandMark">GP</span>
+        <div>
+          <p class="brand">Gestock Pro</p>
+          <p class="subtitle">GKE DevOps Demo</p>
+        </div>
+      </div>
+      <div class="navSection">
+        <span>Monitoring</span>
+        <nav>
+          <a class="active" href="#overview">Dashboard</a>
+          <a href="#hpa">Auto-scaling HPA</a>
+          <a href="#pods">Pods & Workloads</a>
+          <a href="#services">Services reseau</a>
+          <a href="#metrics">Metriques CPU</a>
+        </nav>
+      </div>
+      <div class="sidebarFooter">
+        <p class="label">Projet GCP</p>
+        <strong>grid-cluster-497106</strong>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div class="breadcrumb">
+          <span>Cluster</span>
+          <strong>gestock-cluster</strong>
+        </div>
+        <div class="topActions">
+          <span class="topChip success">Production</span>
+          <span class="topChip">GKE</span>
+          <span class="topChip" id="lastUpdated">Sync...</span>
+        </div>
+      </header>
+
+      <section class="hero" id="overview">
+        <div>
+          <p class="eyebrow">Google Kubernetes Engine</p>
+          <h1>Dashboard de demonstration DevOps</h1>
+          <p class="lead">Visualisation en temps reel du backend, MongoDB, Services, HPA et metriques CPU.</p>
+        </div>
+        <div class="actions">
+          <button id="refreshBtn" class="button primary">Actualiser</button>
+          <button id="stressBtn" class="button danger">Lancer stress test</button>
+        </div>
+      </section>
+
+      <section class="grid cards">
+        <article class="card">
+          <div class="cardTop">
+            <span class="label">Cluster</span>
+            <span class="miniIcon mint"></span>
+          </div>
+          <strong id="clusterState">Verification...</strong>
+          <div class="sparkline teal"><span></span><span></span><span></span><span></span><span></span></div>
+        </article>
+        <article class="card">
+          <div class="cardTop">
+            <span class="label">Backend Pods</span>
+            <span class="miniIcon orange"></span>
+          </div>
+          <strong id="backendPods">-</strong>
+          <div class="sparkline orange"><span></span><span></span><span></span><span></span><span></span></div>
+        </article>
+        <article class="card">
+          <div class="cardTop">
+            <span class="label">HPA</span>
+            <span class="miniIcon red"></span>
+          </div>
+          <strong id="hpaState">-</strong>
+          <div class="sparkline red"><span></span><span></span><span></span><span></span><span></span></div>
+        </article>
+        <article class="card">
+          <div class="cardTop">
+            <span class="label">IP publique</span>
+            <span class="miniIcon dark"></span>
+          </div>
+          <strong id="externalIp">-</strong>
+          <div class="sparkline teal"><span></span><span></span><span></span><span></span><span></span></div>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="panelHeader">
+          <div>
+            <h2>API publique</h2>
+            <p>Liens utiles pour montrer que le LoadBalancer expose bien le backend.</p>
+          </div>
+          <span class="panelBadge">LoadBalancer</span>
+        </div>
+        <div id="publicLinks" class="links"></div>
+      </section>
+
+      <section class="panel" id="hpa">
+        <div class="panelHeader">
+          <div>
+            <h2>Horizontal Pod Autoscaler</h2>
+            <p>Seuil CPU configure a 50 %, entre 1 et 5 replicas.</p>
+          </div>
+          <span class="panelBadge hot">CPU target 50%</span>
+        </div>
+        <div class="tableWrap">
+          <table>
+            <thead id="hpaHead"></thead>
+            <tbody id="hpaBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel" id="pods">
+        <div class="panelHeader">
+          <div>
+            <h2>Pods</h2>
+            <p>Etat des pods backend et MongoDB.</p>
+          </div>
+          <span class="panelBadge">Workloads</span>
+        </div>
+        <div class="tableWrap">
+          <table>
+            <thead id="podsHead"></thead>
+            <tbody id="podsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel" id="services">
+        <div class="panelHeader">
+          <div>
+            <h2>Services</h2>
+            <p>LoadBalancer public et services internes du cluster.</p>
+          </div>
+          <span class="panelBadge">Network</span>
+        </div>
+        <div class="tableWrap">
+          <table>
+            <thead id="servicesHead"></thead>
+            <tbody id="servicesBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel" id="metrics">
+        <div class="panelHeader">
+          <div>
+            <h2>Metriques CPU / Memoire</h2>
+            <p>Donnees issues de Metrics Server via kubectl top pods.</p>
+          </div>
+          <span class="panelBadge">kubectl top</span>
+        </div>
+        <div class="tableWrap">
+          <table>
+            <thead id="metricsHead"></thead>
+            <tbody id="metricsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panelHeader">
+          <div>
+            <h2>Journal</h2>
+            <p>Derniere action executee par le dashboard.</p>
+          </div>
+          <span class="panelBadge">Live log</span>
+        </div>
+        <pre id="logBox">Pret.</pre>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
